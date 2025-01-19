@@ -1,0 +1,6 @@
+@VladPC.WebAPI_HostAddress = http://localhost:5053
+
+GET {{VladPC.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
