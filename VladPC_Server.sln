@@ -9,7 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VladPC.BLL", "VladPC.BLL\Vl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VladPC.DAL", "VladPC.DAL\VladPC.DAL.csproj", "{6C70AAEB-F71E-4D25-8397-20CB24B4FC93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VladPC.Common", "VladPC.Common\VladPC.Common.csproj", "{0D2833C4-8FFE-4C57-8D9A-71F7C43FC758}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VladPC.Common", "VladPC.Common\VladPC.Common.csproj", "{0D2833C4-8FFE-4C57-8D9A-71F7C43FC758}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{BCA1984B-9513-4E7E-8883-9D8A18129C1D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D05BEF83-221C-4D11-A18F-3D1EEC473A11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VladPC.UnitTests", "VladPC.UnitTests\VladPC.UnitTests.csproj", "{FC37741D-EF29-4539-9057-DE62335BBD52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +39,20 @@ Global
 		{0D2833C4-8FFE-4C57-8D9A-71F7C43FC758}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D2833C4-8FFE-4C57-8D9A-71F7C43FC758}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D2833C4-8FFE-4C57-8D9A-71F7C43FC758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCA1984B-9513-4E7E-8883-9D8A18129C1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCA1984B-9513-4E7E-8883-9D8A18129C1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCA1984B-9513-4E7E-8883-9D8A18129C1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCA1984B-9513-4E7E-8883-9D8A18129C1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC37741D-EF29-4539-9057-DE62335BBD52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC37741D-EF29-4539-9057-DE62335BBD52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC37741D-EF29-4539-9057-DE62335BBD52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC37741D-EF29-4539-9057-DE62335BBD52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FC37741D-EF29-4539-9057-DE62335BBD52} = {D05BEF83-221C-4D11-A18F-3D1EEC473A11}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {10F91946-D486-4454-B927-F07B730DB5ED}
