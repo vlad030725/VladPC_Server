@@ -29,6 +29,9 @@ namespace VladPC.Common
         Asus,
         Acer,
         Palit,
+        Asrock,
+        Gigabate,
+        MSI
     }
 
     public enum Socket
@@ -55,6 +58,7 @@ namespace VladPC.Common
         DDR3,
         DDR3L,
         DDR2,
+        GDDR7,
     }
 
     public enum Chipset
@@ -103,6 +107,18 @@ namespace VladPC.Common
     /// </summary>
     public static class DictionaryLists
     {
+        public static Dictionary<Category, string> CategoryMap = new Dictionary<Category, string>()
+        {
+            { Category.Processor, "Процессор" },
+            { Category.MotherBoard,"Материнская плата" },
+            { Category.PowerSupply, "Блок питания" },
+            { Category.Case, "Корпус" },
+            { Category.GraphicsCard, "Видеокарта" },
+            { Category.Cooler, "Кулер" },
+            { Category.RAM, "Оперативная память" },
+            { Category.SSD, "SSD" },
+        };
+
         public static Dictionary<Company, string> CompanyMap = new Dictionary<Company, string>()
         {
             { Company.Intel, "Intel" },
@@ -111,6 +127,9 @@ namespace VladPC.Common
             { Company.Asus, "Asus" },
             { Company.Acer, "Acer" },
             { Company.Palit, "Palit" },
+            { Company.Asrock, "Asrock" },
+            { Company.Gigabate, "Gigabate" },
+            { Company.MSI, "MSI" },
         };
 
         public static Dictionary<Socket, string> SocketMap = new Dictionary<Socket, string>()
@@ -137,6 +156,7 @@ namespace VladPC.Common
             { MemoryType.DDR3, "DDR3" },
             { MemoryType.DDR3L, "DDR3L" },
             { MemoryType.DDR2, "DDR2" },
+            { MemoryType.GDDR7, "GDDR7" },
         };
 
         public static Dictionary<Chipset, string> ChipsetMap = new Dictionary<Chipset, string>()

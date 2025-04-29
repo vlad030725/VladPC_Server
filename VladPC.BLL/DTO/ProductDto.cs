@@ -14,8 +14,6 @@ namespace VladPC.BLL.DTO
 
         public int? Category { get; set; }
 
-        public string? CategoryString { get; set; }
-
         public int? Count { get; set; }
 
         public int? Price { get; set; }

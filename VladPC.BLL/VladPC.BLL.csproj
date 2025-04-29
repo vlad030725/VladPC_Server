@@ -7,15 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\VladPC.Common\VladPC.Common.csproj" />
     <ProjectReference Include="..\VladPC.DAL\VladPC.DAL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="JWT" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.13">
