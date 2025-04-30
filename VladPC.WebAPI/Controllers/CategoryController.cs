@@ -18,7 +18,6 @@ namespace VladPC.WebAPI.Controllers
         }
 
         // GET: api/Category
-        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryDto>>> GetProductCategories()
         {

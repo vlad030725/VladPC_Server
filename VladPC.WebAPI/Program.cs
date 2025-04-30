@@ -18,33 +18,6 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        //var jwtKey = builder.Configuration["Jwt:Key"];
-        //var jwtIssuer = builder.Configuration["Jwt:Issuer"];
-        //var jwtAudience = builder.Configuration["Jwt:Audience"];
-
-        //builder.Services.AddAuthentication(options => 
-        //{ 
-        //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; 
-        //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; 
-        //    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; 
-        //}).AddJwtBearer(options =>
-        //{
-        //    options.RequireHttpsMetadata = false;
-        //    options.SaveToken = true;
-        //    options.TokenValidationParameters = new TokenValidationParameters
-        //    {
-        //        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        //        ValidAudience = builder.Configuration["Jwt:Audience"],
-        //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
-        //        ValidateIssuer = true,
-        //        ValidateAudience = true,
-        //        ValidateLifetime = true,
-        //        ValidateIssuerSigningKey = true,
-        //    };
-        //});
-
-
-
         builder.Services.AddDbContext<VladPcdbContext>(options => 
         {
             options.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionString"), b => b.MigrationsAssembly("VladPC_Server"));

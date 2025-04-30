@@ -25,26 +25,32 @@ namespace VladPC.BLL.Services
             _config = config;
         }
 
-        public string GenerateTokenString(LoginUserDto user)
+        public string GenerateTokenString(string userName, IList<string> roles)
         {
-            //var roles = _userManager.GetRolesAsync(await _userManager.FindByNameAsync(user.UserName));
-
-            IEnumerable<System.Security.Claims.Claim> claims = new List<Claim>
+            var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, "admin")
+                new Claim(ClaimTypes.Name, userName)
             };
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("Jwt:Key").Value));
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var signingCred = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
-            var securityToken = new JwtSecurityToken(
+
+            var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(60),
-                issuer: _config.GetSection("Jwt:Issuer").Value,
-                audience: _config.GetSection("Jwt:Audience").Value,
-                signingCredentials: signingCred);
-            string tokenString = new JwtSecurityTokenHandler().WriteToken(securityToken);
-            return tokenString;
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
+                signingCredentials: signingCred
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
 
         public async Task<bool> Login(LoginUserDto user)
         {
@@ -64,6 +70,16 @@ namespace VladPC.BLL.Services
 
             var result = await _userManager.CreateAsync(identityUser, user.Password);
             return result.Succeeded;
+        }
+
+        public async Task<User> GetUserByName(string userName)
+        {
+            return await _userManager.FindByNameAsync(userName);
+        }
+
+        public async Task<IList<string>> GetRoles(User user)
+        {
+            return await _userManager.GetRolesAsync(user);
         }
     }
 }
