@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VladPC.BLL.DTO;
 using VladPC.BLL.Interfaces;
@@ -17,6 +18,7 @@ namespace VladPC.WebAPI.Controllers
         }
 
         // GET: api/Category
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryDto>>> GetProductCategories()
         {
