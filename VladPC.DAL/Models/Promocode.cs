@@ -9,7 +9,7 @@ public partial class Promocode
 
     public string? Code { get; set; }
 
-    public float? Discount { get; set; }
+    public double? Discount { get; set; }
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

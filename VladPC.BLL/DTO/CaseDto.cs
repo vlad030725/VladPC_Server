@@ -24,6 +24,7 @@ namespace VladPC.BLL.DTO
             Category = casePc.Category;
             Count = casePc.Count;
             Price = casePc.Price;
+            Manufacturer = casePc.Manufacturer;
             HeightCooler = casePc.HeightCooler;
             FormFactor = casePc.FormFactor;
             CatalogString = CreateCatalogString();

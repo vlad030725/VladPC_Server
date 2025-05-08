@@ -13,7 +13,7 @@ public partial class Order
 
     public int? Status { get; set; }
 
-    public DateOnly? CreationDate { get; set; }
+    public DateTime? CreationDate { get; set; }
 
     public virtual ICollection<OrderRow> OrderRows { get; set; } = new List<OrderRow>();
 

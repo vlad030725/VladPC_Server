@@ -26,6 +26,7 @@ namespace VladPC.BLL.DTO
             Category = graphicsCard.Category;
             Count = graphicsCard.Count;
             Price = graphicsCard.Price;
+            Manufacturer = graphicsCard.Manufacturer;
             Frequency = graphicsCard.Frequency;
             CountMemory = graphicsCard.CountMemory;
             MemoryType = graphicsCard.MemoryType;

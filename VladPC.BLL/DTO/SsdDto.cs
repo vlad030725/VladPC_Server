@@ -23,6 +23,7 @@ namespace VladPC.BLL.DTO
             Category = ssd.Category;
             Count = ssd.Count;
             Price = ssd.Price;
+            Manufacturer = ssd.Manufacturer;
             CountMemory = ssd.CountMemory;
             CatalogString = CreateCatalogString();
         }

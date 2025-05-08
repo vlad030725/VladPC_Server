@@ -36,6 +36,7 @@ namespace VladPC.BLL.DTO
             CountRam = motherBoard.CountRam;
             CountSsdm2 = motherBoard.CountSsdm2;
             FormFactor = motherBoard.FormFactor;
+            CatalogString = CreateCatalogString();
         }
         #endregion
 

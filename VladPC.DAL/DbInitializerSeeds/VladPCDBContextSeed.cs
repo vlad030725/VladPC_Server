@@ -40,6 +40,14 @@ namespace VladPC.DAL.DbInitializerSeeds
                 };
 
                 context.AddRange(ProductData);
+
+                IEnumerable<Promocode> PromocodeData = new List<Promocode>()
+                {
+                    new Promocode() { Code = "SALE20", Discount = 0.2 }
+                };
+
+                context.AddRange(PromocodeData);
+
                 context.SaveChanges();
             }
             catch

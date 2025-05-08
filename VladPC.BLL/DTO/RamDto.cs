@@ -26,6 +26,7 @@ namespace VladPC.BLL.DTO
             Category = ram.Category;
             Count = ram.Count;
             Price = ram.Price;
+            Manufacturer = ram.Manufacturer;
             Frequency = ram.Frequency;
             CountMemory = ram.CountMemory;
             MemoryType = ram.MemoryType;

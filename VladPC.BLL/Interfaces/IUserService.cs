@@ -10,9 +10,9 @@ namespace VladPC.BLL.Interfaces
 {
     public interface IUserService
     {
-        string GenerateTokenString(string userName, IList<string> roles);
-        Task<IList<string>> GetRoles(User user);
-        Task<User> GetUserByName(string userName);
+        Task<string> GenerateTokenString(string userName);
+        //Task<IList<string>> GetRoles(User user);
+        //Task<User> GetUserByName(string userName);
         Task<bool> Login(LoginUserDto user);
         Task<bool> RegisterUser(LoginUserDto user);
     }

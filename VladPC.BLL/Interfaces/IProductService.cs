@@ -13,5 +13,6 @@ namespace VladPC.BLL.Interfaces
         IEnumerable<CategoryDto> GetCategoryDictionary();
         CategoryDto GetCategory(int id);
         IEnumerable<ProductDto> GetProducts(Filter filter);
+        ProductDto? GetProduct(int id);
     }
 }

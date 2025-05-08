@@ -25,6 +25,7 @@ namespace VladPC.BLL.DTO
             Category = cooler.Category;
             Count = cooler.Count;
             Price = cooler.Price;
+            Manufacturer = cooler.Manufacturer;
             Socket = cooler.Socket;
             HeightCooler = cooler.HeightCooler;
             Tdp = cooler.Tdp;

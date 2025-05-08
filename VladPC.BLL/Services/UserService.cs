@@ -25,17 +25,23 @@ namespace VladPC.BLL.Services
             _config = config;
         }
 
-        public string GenerateTokenString(string userName, IList<string> roles)
+        public async Task<string> GenerateTokenString(string userName)
         {
+            var user = await _userManager.FindByNameAsync(userName);
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault() ?? "user";
+
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, userName)
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, role),
             };
 
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+            //foreach (var role in roles)
+            //{
+            //    claims.Add(new Claim(ClaimTypes.Role, role));
+            //}
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var signingCred = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
@@ -72,14 +78,14 @@ namespace VladPC.BLL.Services
             return result.Succeeded;
         }
 
-        public async Task<User> GetUserByName(string userName)
-        {
-            return await _userManager.FindByNameAsync(userName);
-        }
+        //public async Task<User> GetUserByName(string userName)
+        //{
+        //    return await _userManager.FindByNameAsync(userName);
+        //}
 
-        public async Task<IList<string>> GetRoles(User user)
-        {
-            return await _userManager.GetRolesAsync(user);
-        }
+        //public async Task<IList<string>> GetRoles(User user)
+        //{
+        //    return await _userManager.GetRolesAsync(user);
+        //}
     }
 }

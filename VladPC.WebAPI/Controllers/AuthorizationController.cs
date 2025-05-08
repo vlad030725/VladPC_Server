@@ -32,13 +32,16 @@ namespace VladPC.WebAPI.Controllers
 
             if (await _userService.Login(user))
             {
-                var identityUser = await _userService.GetUserByName(user.UserName);
-                var roles = await _userService.GetRoles(identityUser);
-                var tokenString = _userService.GenerateTokenString(identityUser.UserName, roles);
-                return Ok(tokenString);
+                //var identityUser = await _userService.GetUserByName(user.UserName);
+                //var roles = await _userService.GetRoles(identityUser);
+                var tokenString = await _userService.GenerateTokenString(user.UserName);
+
+                return Ok(new AuthResponseDto { Token = tokenString });
             }
+
             return BadRequest();
         }
+
 
         [HttpPost("Register")]
         public async Task<IActionResult> RegisterUser(LoginUserDto user)

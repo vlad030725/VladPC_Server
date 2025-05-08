@@ -102,6 +102,14 @@ namespace VladPC.Common
         Mini_ITX,
     }
 
+    public enum Status
+    {
+        InCart,
+        InConfigurator,
+        OnTheWay,
+        Completed,
+    }
+
     /// <summary>
     /// Класс для словарей характеристик, где численному обозначению соответствует строка
     /// </summary>
@@ -198,6 +206,14 @@ namespace VladPC.Common
             { FormFactor.Standart_ATX, "Standart_ATX" },
             { FormFactor.Micro_ATX, "Micro_ATX" },
             { FormFactor.Mini_ITX, "Mini_ITX" },
+        };
+
+        public static Dictionary<Status, string> StatusMap = new Dictionary<Status, string>()
+        {
+            { Status.InCart, "В корзине" },
+            { Status.InConfigurator, "Конфигуратор ПК" },
+            { Status.OnTheWay, "В пути" },
+            { Status.Completed, "Выполнен" },
         };
     }
 }

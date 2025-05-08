@@ -62,7 +62,7 @@ public partial class VladPcdbContext : IdentityDbContext<User, IdentityRole<int>
 
             entity.ToTable("OrderRow");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderRows)
                 .HasForeignKey(d => d.OrderId)
