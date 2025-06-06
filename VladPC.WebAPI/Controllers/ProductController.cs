@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -20,17 +21,25 @@ namespace VladPC.WebAPI.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly IOrderService _orderService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, IOrderService orderService)
         {
             _productService = productService;
+            _orderService = orderService;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts([FromBody] Filter filter)
+        [HttpPost("{mode}")]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts([FromBody] Filter filter, int mode)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userIdClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null && mode == (int)Status.InConfigurator)
+                return Unauthorized();
+
+            var idUser = userIdClaim == null ? -1 : int.Parse(userIdClaim.Value);
             List<ProductDto> products = new List<ProductDto>();
-            await Task.Run(() => products = [.. _productService.GetProducts(filter)]);
+            await Task.Run(() => products = [.. _productService.GetProducts(filter, mode, idUser, mode == 0 ? null : _orderService.GetCart(idUser, (Status)mode))]);
             return Ok(products);
         }
 

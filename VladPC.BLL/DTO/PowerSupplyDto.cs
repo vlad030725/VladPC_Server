@@ -31,6 +31,7 @@ namespace VladPC.BLL.DTO
             Power = powerSupply.Power;
             Status80plus = powerSupply.Status80plus;
             FormFactor = powerSupply.FormFactor;
+            CatalogString = CreateCatalogString();
         }
         #endregion
 
@@ -41,8 +42,7 @@ namespace VladPC.BLL.DTO
                 $"{Name} " +
                 $"[" +
                 $"{Power} Вт; " +
-                $"80+ {DictionaryLists.Status80plusMap[(Status80plus)Status80plus]}; " +
-                $"{DictionaryLists.FormFactorMap[(FormFactor)FormFactor]}" +
+                $"80+ {DictionaryLists.Status80plusMap[(Status80plus)Status80plus]}" +
                 $"]";
         }
     }

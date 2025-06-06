@@ -77,15 +77,5 @@ namespace VladPC.BLL.Services
             var result = await _userManager.CreateAsync(identityUser, user.Password);
             return result.Succeeded;
         }
-
-        //public async Task<User> GetUserByName(string userName)
-        //{
-        //    return await _userManager.FindByNameAsync(userName);
-        //}
-
-        //public async Task<IList<string>> GetRoles(User user)
-        //{
-        //    return await _userManager.GetRolesAsync(user);
-        //}
     }
 }

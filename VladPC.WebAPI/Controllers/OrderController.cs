@@ -5,6 +5,7 @@ using System.Security.Claims;
 using VladPC.BLL.DTO;
 using VladPC.BLL.Interfaces;
 using VladPC.DAL.Models;
+using VladPC.Common;
 
 namespace VladPC.WebAPI.Controllers
 {
@@ -24,13 +25,23 @@ namespace VladPC.WebAPI.Controllers
         [HttpPost("AddToCart/{idProduct}")]
         public async Task<IActionResult> AddProductInCart(int idProduct)
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var userIdClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-                return Unauthorized();
+            var result = await Task.Run(() => _orderService.AddProductToOrder(GetAuthorizeUserId(), idProduct, Status.InCart));
+            return Ok(result);
+        }
 
-            var idUser = int.Parse(userIdClaim.Value);
-            var result = await Task.Run(() => _orderService.AddProductToCart(idUser, idProduct));
+        [Authorize]
+        [HttpPost("AddToConfigurator/{idProduct}")]
+        public async Task<IActionResult> AddProductInConfigurator(int idProduct)
+        {
+            var result = await Task.Run(() => _orderService.AddProductToOrder(GetAuthorizeUserId(), idProduct, Status.InConfigurator));
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("AddConfigurationToCart")]
+        public async Task<IActionResult> AddConfigurationToCart()
+        {
+            var result = await Task.Run(() => _orderService.AddConfigurationToCart(GetAuthorizeUserId()));
             return Ok(result);
         }
 
@@ -38,13 +49,15 @@ namespace VladPC.WebAPI.Controllers
         [HttpGet("Cart")]
         public async Task<IActionResult> GetCart()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var userIdClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-                return Unauthorized();
+            var result = await Task.Run(() => _orderService.GetCart(GetAuthorizeUserId(), Status.InCart));
+            return Ok(result);
+        }
 
-            var idUser = int.Parse(userIdClaim.Value);
-            var result = await Task.Run(() => _orderService.GetCart(idUser));
+        [Authorize]
+        [HttpGet("Configurator")]
+        public async Task<IActionResult> GetConfigurator()
+        {
+            var result = await Task.Run(() => _orderService.GetCart(GetAuthorizeUserId(), Status.InConfigurator));
             return Ok(result);
         }
 
@@ -52,12 +65,6 @@ namespace VladPC.WebAPI.Controllers
         [HttpDelete("Row/{id}")]
         public async Task<IActionResult> DeleteOrderRow(int id)
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var userIdClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-                return Unauthorized();
-
-            var idUser = int.Parse(userIdClaim.Value);
             await Task.Run(() => _orderService.DeleteOrderRow(id));
             return Ok();
         }
@@ -66,14 +73,7 @@ namespace VladPC.WebAPI.Controllers
         [HttpPut("Row")]
         public async Task<IActionResult> ChangeOrderRow([FromBody] ChangeCountOrderRowResponse response)
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var userIdClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-                return Unauthorized();
-
-            var idUser = int.Parse(userIdClaim.Value);
-            bool result = false;
-            await Task.Run(() => result = _orderService.UpdateOrderRow(response));
+            bool result = await Task.Run(() => _orderService.UpdateCountOrderRow(response));
             return Ok(result);
         }
 
@@ -81,13 +81,23 @@ namespace VladPC.WebAPI.Controllers
         [HttpGet("SetOrder")]
         public async Task<IActionResult> SetOrder()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var userIdClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-                return Unauthorized();
+            var result = await Task.Run(() => _orderService.SetOrder(GetAuthorizeUserId()));
+            return Ok(result);
+        }
 
-            var idUser = int.Parse(userIdClaim.Value);
-            await Task.Run(() => _orderService.SetOrder(idUser));
+        [Authorize(Roles = "admin")]
+        [HttpGet("CompliteOrder/{id}")]
+        public async Task<IActionResult> CompliteOrder(int id)
+        {
+            var result = await Task.Run(() => _orderService.CompliteOrder(id));
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("CleanCart")]
+        public async Task<IActionResult> CleanCart()
+        {
+            await Task.Run(() => _orderService.CleanOrder(GetAuthorizeUserId(), Status.InCart));
             return Ok();
         }
 
@@ -95,13 +105,15 @@ namespace VladPC.WebAPI.Controllers
         [HttpGet("History")]
         public async Task<IActionResult> GetOrderHistory()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var userIdClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-                return Unauthorized();
+            var result = await Task.Run(() => _orderService.GetOrderHistory(GetAuthorizeUserId()));
+            return Ok(result);
+        }
 
-            var idUser = int.Parse(userIdClaim.Value);
-            var result = await Task.Run(() => _orderService.GetOrderHistory(idUser));
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public async Task<IActionResult> GetUserOrders()
+        {
+            var result = await Task.Run(() => _orderService.GetUserOrders());
             return Ok(result);
         }
 
@@ -109,14 +121,16 @@ namespace VladPC.WebAPI.Controllers
         [HttpPost("ApplyPromocode")]
         public async Task<IActionResult> ApplyPromocode([FromBody] string promocode)
         {
+            var result = await Task.Run(() => _orderService.ApplyPromocode(GetAuthorizeUserId(), promocode));
+            return Ok(result);
+        }
+
+        private int GetAuthorizeUserId()
+        {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var userIdClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-                return Unauthorized();
-
             var idUser = int.Parse(userIdClaim.Value);
-            var result = await Task.Run(() => _orderService.ApplyPromocode(idUser, promocode));
-            return Ok(result);
+            return idUser;
         }
     }
 }

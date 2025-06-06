@@ -31,7 +31,16 @@ namespace VladPC.Common
         Palit,
         Asrock,
         Gigabate,
-        MSI
+        MSI,
+        MONTECH,
+        DEEPCOOL,
+        ExeGate,
+        Cougar,
+        ID_COOLING,
+        ARDOR_GAMING,
+        Patriot,
+        Kingston,
+        ADATA
     }
 
     public enum Socket
@@ -138,6 +147,15 @@ namespace VladPC.Common
             { Company.Asrock, "Asrock" },
             { Company.Gigabate, "Gigabate" },
             { Company.MSI, "MSI" },
+            { Company.MONTECH, "MONTECH" },
+            { Company.DEEPCOOL, "DEEPCOOL" },
+            { Company.ExeGate, "ExeGate" },
+            { Company.Cougar, "Cougar" },
+            { Company.ID_COOLING, "ID-COOLING" },
+            { Company.ARDOR_GAMING, "ARDOR GAMING" },
+            { Company.Patriot, "Patriot" },
+            { Company.Kingston, "Kingston" },
+            { Company.ADATA, "ADATA" },
         };
 
         public static Dictionary<Socket, string> SocketMap = new Dictionary<Socket, string>()

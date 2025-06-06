@@ -40,8 +40,7 @@ namespace VladPC.BLL.DTO
                 $"{Name} " +
                 $"[" +
                 $"{HeightCooler} мм; " +
-                $"{Tdp} Вт; " +
-                $"{DictionaryLists.SocketMap[(Socket)Socket]}" +
+                $"{Tdp} Вт" +
                 $"]";
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VladPC.BLL.DTO;
+using VladPC.Common;
 using VladPC.DAL.Models;
 
 namespace VladPC.BLL.Interfaces
@@ -16,14 +17,14 @@ namespace VladPC.BLL.Interfaces
         /// <param name="idUser">Id пользователя</param>
         /// <param name="idProduct">Id товара</param>
         /// <returns>Успешно ли товар добавлен в корзину</returns>
-        bool AddProductToCart(int idUser, int idProduct);
+        bool AddProductToOrder(int idUser, int idProduct, Status status);
 
         /// <summary>
         /// Изменение количества товара в строке заказа
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        bool UpdateOrderRow(ChangeCountOrderRowResponse response);
+        bool UpdateCountOrderRow(ChangeCountOrderRowResponse response);
 
         /// <summary>
         /// Удаление строки заказа по Id
@@ -36,7 +37,7 @@ namespace VladPC.BLL.Interfaces
         /// </summary>
         /// <param name="idUser">Id пользователя</param>
         /// <returns>Корзина пользователя</returns>
-        OrderDto GetCart(int idUser);
+        OrderDto GetCart(int idUser, Status status);
 
         /// <summary>
         /// Возвращает список строк заказа по Id заказа.
@@ -44,9 +45,15 @@ namespace VladPC.BLL.Interfaces
         /// <param name="idOrder"> Id заказа</param>
         /// <returns>Список строк заказа</returns>
         List<OrderRowDto> GetOrderRows(int idOrder);
-        void SetOrder(int idUser);
+        bool SetOrder(int idUser);
         List<OrderDto> GetOrderHistory(int idUser);
         bool ApplyPromocode(int idUser, string promocode);
         PromocodeDto? GetPromocode(int? id);
+        void UpdateOrderRow(int id, int idProduct);
+        void CreateOrderRow(OrderRowDto orderRow);
+        bool AddConfigurationToCart(int idUser);
+        void CleanOrder(int idUser, Status status);
+        List<OrderDto> GetUserOrders();
+        bool CompliteOrder(int id);
     }
 }

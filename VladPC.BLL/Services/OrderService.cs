@@ -22,21 +22,21 @@ namespace VladPC.BLL.Services
             _productService = productService;
         }
 
-
-
         #region Order
-        public bool AddProductToCart(int idUser, int idProduct)
+        public bool AddProductToOrder(int idUser, int idProduct, Status status)
         {
-            var cart = GetCart(idUser);
+            var order = GetCart(idUser, status);
             var product = _productService.GetProduct(idProduct);
             if (product == null || product.Count == 0)
                 return false;
-            OrderRow? row = db.OrderRow.GetList().FirstOrDefault(i => i.OrderId == cart.Id && i.ProductId == idProduct);
-            if (row != null)
+            var row = GetOrderRows(order.Id).FirstOrDefault(i => i.OrderId == order.Id && (i.ProductId == idProduct && status == Status.InCart || i.Product.Category == product.Category && status == Status.InConfigurator));
+            if (row != null && status == Status.InCart)
                 return false;
+            else if (row != null && status == Status.InConfigurator)
+                DeleteOrderRow(row.Id);
             db.OrderRow.Create(new OrderRow()
             {
-                OrderId = cart.Id,
+                OrderId = order.Id,
                 ProductId = idProduct,
                 Price = product.Price,
                 Count = 1
@@ -45,12 +45,12 @@ namespace VladPC.BLL.Services
             return true;
         }
         
-        public OrderDto GetCart(int idUser)
+        public OrderDto GetCart(int idUser, Status status)
         {
             Order? order;
             try
             {
-                order = db.Order.GetList().Where(i => i.Status == (int)Status.InCart && i.UserId == idUser).Single();
+                order = db.Order.GetList().Where(i => i.Status == (int)status && i.UserId == idUser).Single();
             }
             catch(Exception ex)
             {
@@ -58,23 +58,34 @@ namespace VladPC.BLL.Services
                 {
                     UserId = idUser,
                     PromocodeId = null,
-                    Status = (int)Status.InCart,
+                    Status = (int)status,
                     CreationDate = null,
                 });
                 Save();
-                order = db.Order.GetList().Where(i => i.Status == (int)Status.InCart && i.UserId == idUser).SingleOrDefault();
+                order = db.Order.GetList().Where(i => i.Status == (int)status && i.UserId == idUser).SingleOrDefault();
             }
             var orderRows = db.OrderRow.GetList().Where(i => i.OrderId == order.Id).ToList();
             return new OrderDto(order, GetOrderRows(order.Id), GetPromocode(order.PromocodeId));
         }
 
-        public void SetOrder(int idUser)
+        public bool SetOrder(int idUser)
         {
-            var cart = GetCart(idUser);
+            var cart = GetCart(idUser, Status.InCart);
+            if (cart.OrderRows.Count == 0)
+                return false;
             Order order = db.Order.GetItem(cart.Id);
             order.Status = (int)Status.OnTheWay;
             order.CreationDate = DateTime.UtcNow;
             Save();
+            return true;
+        }
+
+        public bool CompliteOrder(int id)
+        {
+            Order order = db.Order.GetItem(id);
+            order.Status = (int)Status.Completed;
+            Save();
+            return true;
         }
 
         public List<OrderDto> GetOrderHistory(int idUser)
@@ -85,18 +96,54 @@ namespace VladPC.BLL.Services
                 .ToList();
         }
 
+        public List<OrderDto> GetUserOrders()
+        {
+            return db.Order.GetList()
+                .Where(i => i.Status == (int)Status.OnTheWay)
+                .Select(i => new OrderDto(i, GetOrderRows(i.Id), GetPromocode(i.PromocodeId)))
+                .ToList();
+        }
+
         public bool ApplyPromocode(int idUser, string promocode)
         {
             var pc = db.Promocode.GetList().FirstOrDefault(i => i.Code == promocode);
             if (pc != null)
             {
-                var cart = GetCart(idUser);
+                var cart = GetCart(idUser, Status.InCart);
                 Order order = db.Order.GetItem(cart.Id);
                 order.Promocode = pc;
                 Save();
                 return true;
             }
             return false;
+        }
+
+        public bool AddConfigurationToCart(int idUser)
+        {
+            var config = GetCart(idUser, Status.InConfigurator);
+            List<bool> inConfig = new List<bool>() { false, false, false, false, false, false, false, false };
+            config.OrderRows.ForEach(i => inConfig[(int)i.Product.Category] = true);
+            if (inConfig.Contains(false))
+                return false;
+            CleanOrder(idUser, Status.InCart);
+            var cart = GetCart(idUser, Status.InCart);
+
+            var configRows = GetOrderRows(config.Id);
+            for (int i = 0; i < configRows.Count; i++)
+            {
+                configRows[i].OrderId = cart.Id;
+                CreateOrderRow(configRows[i]);
+            }
+            Save();
+
+            return true;
+        }
+
+        public void CleanOrder(int idUser, Status status)
+        {
+            var order = GetCart(idUser, status);
+            order.OrderRows.ForEach(i => db.OrderRow.Delete(i.Id));
+            Save();
         }
         #endregion
 
@@ -114,7 +161,7 @@ namespace VladPC.BLL.Services
             Save();
         }
 
-        public bool UpdateOrderRow(ChangeCountOrderRowResponse response)
+        public bool UpdateCountOrderRow(ChangeCountOrderRowResponse response)
         {
             OrderRow orderRow = db.OrderRow.GetItem(response.Id);
             ProductDto product = _productService.GetProduct((int)orderRow.ProductId);
@@ -125,6 +172,25 @@ namespace VladPC.BLL.Services
                 return true;
             }
             return false;
+        }
+
+        public void UpdateOrderRow(int id, int idProduct)
+        {
+            OrderRow orderRow = db.OrderRow.GetItem(id);
+            orderRow.ProductId = idProduct;
+            Save();
+        }
+
+        public void CreateOrderRow(OrderRowDto orderRow)
+        {
+            db.OrderRow.Create(new OrderRow()
+            {
+                OrderId = orderRow.OrderId,
+                ProductId = orderRow.ProductId,
+                Price = orderRow.Price,
+                Count = orderRow.Count,
+            });
+            Save();
         }
         #endregion
 
